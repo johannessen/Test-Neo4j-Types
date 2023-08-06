@@ -258,7 +258,7 @@ sub neo4j_path_ok {
 sub _point_test {
 	my ($point_class) = @_;
 	
-	plan tests => 9+3 + 9+3+3+3+2 + 6+6+6+6 + 1;
+	plan tests => (9-6)+3 + (9-6)+3+3+3+2 + 6+6+6+6 + 1;
 	
 	my (@c, $p);
 	
@@ -267,12 +267,12 @@ sub _point_test {
 	@c = ( 2.294, 48.858, 396 );
 	$p = $point_class->new( 4979, @c );
 	is $p->srid(), 4979, 'eiffel srid';
-	is $p->X(), 2.294, 'eiffel X';
-	is $p->Y(), 48.858, 'eiffel Y';
-	is $p->Z(), 396, 'eiffel Z';
-	is $p->longitude(), 2.294, 'eiffel lon';
-	is $p->latitude(), 48.858, 'eiffel lat';
-	is $p->height(), 396, 'eiffel ellipsoidal height';
+# 	is $p->X(), 2.294, 'eiffel X';
+# 	is $p->Y(), 48.858, 'eiffel Y';
+# 	is $p->Z(), 396, 'eiffel Z';
+# 	is $p->longitude(), 2.294, 'eiffel lon';
+# 	is $p->latitude(), 48.858, 'eiffel lat';
+# 	is $p->height(), 396, 'eiffel ellipsoidal height';
 	is_deeply [$p->coordinates], [@c], 'eiffel coords';
 	is scalar ($p->coordinates), 3, 'scalar context eiffel coords';
 	
@@ -287,12 +287,12 @@ sub _point_test {
 	@c = ( 12, 34 );
 	$p = $point_class->new( 7203, @c );
 	is $p->srid(), 7203, 'plane srid';
-	is $p->X(), 12, 'plane X';
-	is $p->Y(), 34, 'plane Y';
-	ok ! defined $p->Z(), 'plane Z';
-	is $p->longitude(), 12, 'plane lon';
-	is $p->latitude(), 34, 'plane lat';
-	ok ! defined $p->height(), 'plane height';
+# 	is $p->X(), 12, 'plane X';
+# 	is $p->Y(), 34, 'plane Y';
+# 	ok ! defined $p->Z(), 'plane Z';
+# 	is $p->longitude(), 12, 'plane lon';
+# 	is $p->latitude(), 34, 'plane lat';
+# 	ok ! defined $p->height(), 'plane height';
 	is_deeply [$p->coordinates], [@c], 'plane coords';
 	is scalar ($p->coordinates), 2, 'scalar context plane coords';
 	

@@ -84,12 +84,6 @@ sub DOES { $_[1] eq 'Neo4j::Types::Point' }
 
 sub srid { shift->[1] }
 sub coordinates { @{shift->[0]} }
-sub X { shift->[0][0] }
-sub Y { shift->[0][1] }
-sub Z { shift->[0][2] }
-sub longitude { shift->[0][0] }
-sub latitude  { shift->[0][1] }
-sub height    { shift->[0][2] }
 sub new {
 	my ($class, $srid, @coordinates) = @_;
 	my $dim = { 4326 => 2, 4979 => 3, 7203 => 2, 9157 => 3 }->{$srid // 0};
