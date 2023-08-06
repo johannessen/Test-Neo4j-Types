@@ -61,6 +61,31 @@ many of them.
 L<Test::Neo4j::Types> offers the following functions.
 All functions are exported by default.
 
+=head2 neo4j_datetime_ok
+
+ sub datetime_new ($class, $params) {
+   return bless { ... }, $class;
+ }
+ neo4j_datetime_ok $datetime_class, \&datetime_new;
+ neo4j_datetime_ok $datetime_class, \&datetime_new, $subtest_name;
+
+Verifies that C<$datetime_class> is a package that implements
+the interface specified for temporal instants by L<Neo4j::Types>.
+
+C<\&datetime_new> must be a reference to a subroutine that can
+construct a new temporal instant of the type C<$datetime_class>
+based on the parameters provided in the hash ref C<$params>.
+The parameters have names exactly matching the methods in
+L<Neo4j::Types::DateTime>, but epoch and type are not provided:
+
+ $params = {
+   days        => 6560,    # 1987-12-18
+   nanoseconds => 0,
+   seconds     => 72000,   # 20:00 UTC
+   tz_name     => 'America/Los_Angeles',
+   tz_offset   => -28800,  # UTC-08
+ };
+
 =head2 neo4j_node_ok
 
  sub node_new ($class, $params) {

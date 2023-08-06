@@ -6,7 +6,7 @@ use lib qw(lib);
 use Test::More 0.88;
 use Test::Neo4j::Types;
 
-plan tests => 4;
+plan tests => 5;
 
 
 neo4j_node_ok 'Neo4j_Test::Node', \&Neo4j_Test::Node::new;
@@ -16,6 +16,8 @@ neo4j_relationship_ok 'Neo4j_Test::Rel', \&Neo4j_Test::Rel::new;
 neo4j_path_ok 'Neo4j_Test::Path', \&Neo4j_Test::Path::new;
 
 neo4j_point_ok 'Neo4j_Test::Point';
+
+neo4j_datetime_ok 'Neo4j_Test::DateTime', \&Neo4j_Test::DateTime::new;
 
 
 done_testing;
@@ -91,4 +93,32 @@ sub new {
 	die "Points with SRID $srid must have $dim dimensions" if @coordinates < $dim;
 	die unless defined $dim && @coordinates >= $dim;  # this alone is enough
 	return bless [ [@coordinates[0 .. $dim - 1]], $srid ], $class;
+}
+
+
+package Neo4j_Test::DateTime;
+sub DOES { $_[1] eq 'Neo4j::Types::DateTime' }
+
+sub days { shift->[0] }
+sub nanoseconds { shift->[1] }
+sub seconds { shift->[2] }
+sub tz_name { shift->[3] }
+sub tz_offset { shift->[4] }
+sub epoch { my $self = shift; ($self->days//0) * 86400 + ($self->seconds//0) }
+sub type {
+	my $self = shift;
+	return "DATE" if ! defined $self->seconds;
+	my $type = defined $self->days ? "DATETIME" : "TIME";
+	my $zone = defined $self->tz_offset || defined $self->tz_name ? "ZONED" : "LOCAL";
+	return "$zone $type";
+}
+sub new {
+	my ($class, $params) = @_;
+	bless [
+		$params->{days},
+		$params->{nanoseconds},
+		$params->{seconds},
+		$params->{tz_name},
+		$params->{tz_offset},
+	], $class;
 }

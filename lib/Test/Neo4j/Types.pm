@@ -16,6 +16,7 @@ BEGIN { our @EXPORT = qw(
 	neo4j_relationship_ok
 	neo4j_path_ok
 	neo4j_point_ok
+	neo4j_datetime_ok
 )}
 
 {
@@ -372,6 +373,91 @@ sub neo4j_point_ok {
 	my ($class, $name) = @_;
 	$name //= "neo4j_point_ok '$class'";
 	subtest $name, sub { _point_test($class) };
+}
+
+
+sub _datetime_test {
+	my ($datetime_class, $new) = @_;
+	
+	plan tests => 5 * 7 + 1;
+	
+	my ($dt, $p, $type);
+	
+	$dt = $new->($datetime_class, $p = {
+		days => 18645,  # 2021-01-18
+	});
+	is $dt->days, $p->{days}, 'date: days';
+	is $dt->epoch, 1610928000, 'date: epoch';
+	is $dt->nanoseconds, $p->{nanoseconds}, 'date: no nanoseconds';
+	is $dt->seconds, $p->{seconds}, 'date: no seconds';
+	is $dt->type, 'DATE', 'date: type';
+	is $dt->tz_name, $p->{tz_name}, 'date: no tz_name';
+	is $dt->tz_offset, $p->{tz_offset}, 'date: no tz_offset';
+	
+	$type = lc 'LOCAL TIME';
+	$dt = $new->($datetime_class, $p = {
+		nanoseconds => 1,
+		seconds     => 0,
+	});
+	is $dt->days, $p->{days}, 'local time: no days';
+	is $dt->epoch, 0, 'local time: epoch';
+	is $dt->nanoseconds, $p->{nanoseconds}, 'local time: nanoseconds';
+	is $dt->seconds, $p->{seconds}, 'local time: seconds';
+	is $dt->type, 'LOCAL TIME', 'local time: type';
+	is $dt->tz_name, $p->{tz_name}, 'local time: no tz_name';
+	is $dt->tz_offset, $p->{tz_offset}, 'local time: no tz_offset';
+	
+	$type = lc 'ZONED TIME';
+	$dt = $new->($datetime_class, $p = {  
+		nanoseconds => 5e8,     # 0.5 s
+		seconds     => 86340,   # 23:59
+		tz_offset   => -28800,  # -8 h
+	});
+	is $dt->days, $p->{days}, 'zoned time: no days';
+	is $dt->epoch, 86340, 'zoned time: epoch';
+	is $dt->nanoseconds, $p->{nanoseconds}, 'zoned time: nanoseconds';
+	is $dt->seconds, $p->{seconds}, 'zoned time: seconds';
+	is $dt->type, 'ZONED TIME', 'zoned time: type';
+	is $dt->tz_name, $p->{tz_name}, 'zoned time: no tz_name';
+	is $dt->tz_offset, $p->{tz_offset}, 'zoned time: tz_offset';
+	
+	$type = lc 'LOCAL DATETIME';
+	$dt = $new->($datetime_class, $p = {
+		days        => -1,
+		nanoseconds => 999_999_999,
+		seconds     => 86399,
+	});
+	is $dt->days, $p->{days}, 'local datetime: days';
+	is $dt->epoch, -1, 'local datetime: epoch';
+	is $dt->nanoseconds, $p->{nanoseconds}, 'local datetime: nanoseconds';
+	is $dt->seconds, $p->{seconds}, 'local datetime: seconds';
+	is $dt->type, 'LOCAL DATETIME', 'local datetime: type';
+	is $dt->tz_name, $p->{tz_name}, 'local datetime: no tz_name';
+	is $dt->tz_offset, $p->{tz_offset}, 'local datetime: no tz_offset';
+	
+	$type = lc 'ZONED DATETIME';
+	$dt = $new->($datetime_class, $p = {
+		days        => 6560,   # 1987-12-18
+		nanoseconds => 0,
+		seconds     => 72000,  # 20:00 UTC
+		tz_name     => 'America/Los_Angeles',
+	});
+	is $dt->days, $p->{days}, 'zoned datetime: days';
+	is $dt->epoch, 566856000, 'zoned datetime: epoch';
+	is $dt->nanoseconds, $p->{nanoseconds}, 'zoned datetime: nanoseconds';
+	is $dt->seconds, $p->{seconds}, 'zoned datetime: seconds';
+	is $dt->type, 'ZONED DATETIME', 'zoned datetime: type';
+	is $dt->tz_name, $p->{tz_name}, 'zoned datetime: tz_name';
+	is $dt->tz_offset, $p->{tz_offset}, 'zoned datetime: no tz_offset';
+	
+	ok $dt->DOES('Neo4j::Types::DateTime'), 'does role';
+}
+
+
+sub neo4j_datetime_ok {
+	my ($class, $new, $name) = @_;
+	$name //= "neo4j_datetime_ok '$class'";
+	subtest $name, sub { _datetime_test($class, $new) };
 }
 
 
