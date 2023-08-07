@@ -107,17 +107,28 @@ sub tz_offset { shift->[4] }
 sub epoch { my $self = shift; ($self->days//0) * 86400 + ($self->seconds//0) }
 sub type {
 	my $self = shift;
-	return "DATE" if ! defined $self->seconds;
-	my $type = defined $self->days ? "DATETIME" : "TIME";
-	my $zone = defined $self->tz_offset || defined $self->tz_name ? "ZONED" : "LOCAL";
-	return "$zone $type";
+	my $days      = defined $self->days;
+	my $seconds   = defined $self->seconds;
+	my $tz_offset = defined $self->tz_offset;
+	my $tz_name   = defined $self->tz_name;
+	return 'DATE'
+		if   $days && ! $seconds && ! $tz_offset && ! $tz_name;
+	return 'LOCAL TIME'
+		if ! $days &&   $seconds && ! $tz_offset && ! $tz_name;
+	return 'ZONED TIME'
+		if ! $days &&   $seconds &&   $tz_offset && ! $tz_name;
+	return 'LOCAL DATETIME'
+		if   $days &&   $seconds && ! $tz_offset && ! $tz_name;
+	return 'ZONED DATETIME'
+		if   $days &&   $seconds &&   ($tz_offset || $tz_name);
+	die 'Type inconsistent';
 }
 sub new {
 	my ($class, $params) = @_;
 	bless [
 		$params->{days},
-		$params->{nanoseconds},
-		$params->{seconds},
+		$params->{nanoseconds} // (defined $params->{seconds} ? 0 : undef),
+		$params->{seconds} // (defined $params->{nanoseconds} ? 0 : undef),
 		$params->{tz_name},
 		$params->{tz_offset},
 	], $class;
