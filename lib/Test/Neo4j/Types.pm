@@ -17,6 +17,7 @@ BEGIN { our @EXPORT = qw(
 	neo4j_path_ok
 	neo4j_point_ok
 	neo4j_datetime_ok
+	neo4j_duration_ok
 )}
 
 {
@@ -471,6 +472,42 @@ sub neo4j_datetime_ok {
 	my ($class, $new, $name) = @_;
 	$name //= "neo4j_datetime_ok '$class'";
 	subtest $name, sub { _datetime_test($class, $new) };
+}
+
+
+sub _duration_test {
+	my ($duration_class, $new) = @_;
+	
+	plan tests => 2 * 4 + 1;
+	
+	my $d;
+	
+	$d = $new->($duration_class, {
+		months => 18,
+		seconds => 172800,
+	});
+	is $d->months, 18, 'months';
+	is $d->days, 0, 'no days yields zero';
+	is $d->seconds, 172800, 'seconds';
+	is $d->nanoseconds, 0, 'no nanoseconds yields zero';
+	
+	$d = $new->($duration_class, {
+		days => -42,
+		nanoseconds => -2000,
+	});
+	is $d->months, 0, 'no months yields zero';
+	is $d->days, -42, 'days';
+	is $d->seconds, 0, 'no seconds yields zero';
+	is $d->nanoseconds, -2000, 'nanoseconds';
+	
+	ok $d->DOES('Neo4j::Types::Duration'), 'does role';
+}
+
+
+sub neo4j_duration_ok {
+	my ($class, $new, $name) = @_;
+	$name //= "neo4j_duration_ok '$class'";
+	subtest $name, sub { _duration_test($class, $new) };
 }
 
 

@@ -7,9 +7,13 @@ use Test::More 0.88;
 use Test::Neo4j::Types;
 
 plan skip_all => 'Skipping Neo4j::Types::Generic::* tests - not available'
-	unless eval { require Neo4j::Types::Generic::DateTime; 1 };
+	unless eval {
+		require Neo4j::Types::Generic::DateTime;
+		require Neo4j::Types::Generic::Duration;
+		return 1;
+	};
 
-plan tests => 3;
+plan tests => 4;
 
 
 # These packages simply check the unreleased Neo4j::Types 2.00
@@ -32,6 +36,11 @@ neo4j_datetime_ok 'Neo4j::Types::Generic::DateTime', sub {
 	return Neo4j::Types::DateTime->new($epoch, $tz);
 }, 'epoch syntax neo4j_datetime_ok';
 ok $epoch_syntax_ok, 'epoch syntax ok';
+
+neo4j_duration_ok 'Neo4j::Types::Generic::Duration', sub {
+	my ($class, $params) = @_;
+	Neo4j::Types::Duration->new($params);
+};
 
 
 done_testing;

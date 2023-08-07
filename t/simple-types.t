@@ -6,7 +6,7 @@ use lib qw(lib);
 use Test::More 0.88;
 use Test::Neo4j::Types;
 
-plan tests => 5;
+plan tests => 6;
 
 
 neo4j_node_ok 'Neo4j_Test::Node', \&Neo4j_Test::Node::new;
@@ -18,6 +18,8 @@ neo4j_path_ok 'Neo4j_Test::Path', \&Neo4j_Test::Path::new;
 neo4j_point_ok 'Neo4j_Test::Point';
 
 neo4j_datetime_ok 'Neo4j_Test::DateTime', \&Neo4j_Test::DateTime::new;
+
+neo4j_duration_ok 'Neo4j_Test::Duration', \&Neo4j_Test::Duration::new;
 
 
 done_testing;
@@ -131,5 +133,23 @@ sub new {
 		$params->{seconds} // (defined $params->{nanoseconds} ? 0 : undef),
 		$params->{tz_name},
 		$params->{tz_offset},
+	], $class;
+}
+
+
+package Neo4j_Test::Duration;
+sub DOES { $_[1] eq 'Neo4j::Types::Duration' }
+
+sub months { shift->[0] }
+sub days { shift->[1] }
+sub seconds { shift->[2] }
+sub nanoseconds { shift->[3] }
+sub new {
+	my ($class, $params) = @_;
+	bless [
+		$params->{months} // 0,
+		$params->{days} // 0,
+		$params->{seconds} // 0,
+		$params->{nanoseconds} // 0,
 	], $class;
 }

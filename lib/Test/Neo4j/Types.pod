@@ -86,6 +86,30 @@ L<Neo4j::Types::DateTime>, but epoch and type are not provided:
    tz_offset   => -28800,  # UTC-08
  };
 
+=head2 neo4j_duration_ok
+
+ sub duration_new ($class, $params) {
+   return bless { ... }, $class;
+ }
+ neo4j_duration_ok $duration_class, \&duration_new;
+ neo4j_duration_ok $duration_class, \&duration_new, $subtest_name;
+
+Verifies that C<$duration_class> is a package that implements
+the interface specified for temporal durations by L<Neo4j::Types>.
+
+C<\&duration_new> must be a reference to a subroutine that can
+construct a new temporal instant of the type C<$duration_class>
+based on the parameters provided in the hash ref C<$params>.
+The parameters have names exactly matching the methods in
+L<Neo4j::Types::Duration>:
+
+ $params = {
+   months      => 18,      # 1.5 years
+   days        => 42,      # 12 weeks
+   seconds     => 172800,  # 48 hours
+   nanoseconds => 0,
+ };
+
 =head2 neo4j_node_ok
 
  sub node_new ($class, $params) {
