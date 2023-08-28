@@ -44,8 +44,10 @@ L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/n
    return bless [ @$elements ], $class;
  };
  
- # For a point data structure:
+ # For spatial / temporal data structures:
  neo4j_point_ok 'Local::Point';
+ neo4j_datetime_ok 'Local::Temporal::Instant', sub {...};
+ neo4j_duration_ok 'Local::Temporal::Duration', sub {...};
 
 =head1 DESCRIPTION
 
