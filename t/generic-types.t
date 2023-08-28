@@ -11,10 +11,11 @@ plan skip_all => 'Skipping Neo4j::Types::Generic::* tests - not available'
 		require Neo4j::Types::Generic::Point;
 		require Neo4j::Types::Generic::DateTime;
 		require Neo4j::Types::Generic::Duration;
+		require Neo4j::Types::Generic::ByteArray;
 		return 1;
 	};
 
-plan tests => 5;
+plan tests => 6;
 
 
 # These packages simply check the unreleased Neo4j::Types 2.00
@@ -49,6 +50,11 @@ ok $epoch_syntax_ok, 'epoch syntax ok';
 neo4j_duration_ok 'Neo4j::Types::Generic::Duration', sub {
 	my ($class, $params) = @_;
 	Neo4j::Types::Generic::Duration->new($params);
+};
+
+neo4j_bytearray_ok 'Neo4j::Types::Generic::ByteArray', sub {
+	my ($class, $params) = @_;
+	Neo4j::Types::Generic::ByteArray->new($params->{as_string});
 };
 
 

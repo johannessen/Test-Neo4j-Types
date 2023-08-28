@@ -18,6 +18,7 @@ BEGIN { our @EXPORT = qw(
 	neo4j_point_ok
 	neo4j_datetime_ok
 	neo4j_duration_ok
+	neo4j_bytearray_ok
 )}
 
 {
@@ -529,6 +530,36 @@ sub neo4j_duration_ok {
 	$name = "neo4j_duration_ok '$class'" unless defined $name;
 	_load_module_ok($name, $class) and
 	subtest $name, sub { _duration_test($class, $new) };
+}
+
+
+sub _bytearray_test {
+	my ($bytearray_class, $new) = @_;
+	
+	plan tests => 1 + 2 + 1;
+	
+	my $d;
+	
+	$d = $new->($bytearray_class, {
+		as_string => 'foo',
+	});
+	is $d->as_string, 'foo', 'bytes "foo"';
+	
+	$d = $new->($bytearray_class, {
+		as_string => "\x{100}",
+	});
+	ok ! utf8::is_utf8($d->as_string), 'wide char bytearray: UTF8 off';
+	ok length($d->as_string) > 1, 'wide char bytearray: multiple bytes';
+	
+	ok $d->DOES('Neo4j::Types::ByteArray'), 'does role';
+}
+
+
+sub neo4j_bytearray_ok {
+	my ($class, $new, $name) = @_;
+	$name //= "neo4j_bytearray_ok '$class'";
+	_load_module_ok($name, $class) and
+	subtest $name, sub { _bytearray_test($class, $new) };
 }
 
 

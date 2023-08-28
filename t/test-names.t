@@ -7,7 +7,7 @@ use Test::More 0.88;
 use Test::Neo4j::Types;
 use Neo4j_Test::Simple;
 
-plan tests => 6;
+plan tests => 7;
 
 
 # Verify that the test tools accept a custom test name
@@ -26,6 +26,8 @@ neo4j_point_ok 'Neo4j_Test::Point', \&Neo4j_Test::Point::new, 'sp';
 neo4j_datetime_ok 'Neo4j_Test::DateTime', \&Neo4j_Test::DateTime::new, 'ti';
 
 neo4j_duration_ok 'Neo4j_Test::Duration', \&Neo4j_Test::Duration::new, 'td';
+
+neo4j_bytearray_ok 'Neo4j_Test::ByteArray', \&Neo4j_Test::ByteArray::new, 'ba';
 
 
 done_testing;

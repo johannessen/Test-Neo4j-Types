@@ -46,6 +46,9 @@ L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/n
  neo4j_point_ok 'Local::Point', sub {...};
  neo4j_datetime_ok 'Local::Temporal::Instant', sub {...};
  neo4j_duration_ok 'Local::Temporal::Duration', sub {...};
+ 
+ # For a byte array data structure:
+ neo4j_bytearray_ok 'Local::ByteArray', sub {...};
 
 =head1 DESCRIPTION
 
@@ -67,6 +70,27 @@ effort to avoid problems caused by such changes.
 
 L<Test::Neo4j::Types> offers the following functions.
 All functions are exported by default.
+
+=head2 neo4j_bytearray_ok
+
+ sub bytearray_new ($class, $params) {
+   return bless { ... }, $class;
+ }
+ neo4j_bytearray_ok $bytearray_class, \&bytearray_new;
+ neo4j_bytearray_ok $bytearray_class, \&bytearray_new, $subtest_name;
+
+Verifies that C<$bytearray_class> is a package that implements
+the interface specified for Neo4j byte arrays by L<Neo4j::Types>.
+
+C<\&bytearray_new> must be a reference to a subroutine that can
+construct a new Neo4j byte array of the type C<$bytearray_class>
+based on the parameter provided in the hash ref C<$params>.
+The parameter has a name exactly matching the method in
+L<Neo4j::Types::ByteArray>:
+
+ $params = {
+   as_string => 'bytes',
+ };
 
 =head2 neo4j_datetime_ok
 
