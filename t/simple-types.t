@@ -104,8 +104,16 @@ sub DOES { $_[1] eq 'Neo4j::Types::DateTime' }
 sub days { shift->[0] }
 sub nanoseconds { shift->[1] }
 sub seconds { shift->[2] }
-sub tz_name { shift->[3] }
 sub tz_offset { shift->[4] }
+sub tz_name {
+	my $self = shift;
+	if (! defined $self->[3] && defined $self->[4] && $self->[4] % 3600 == 0) {
+		return 'Etc/GMT' if $self->[4] == 0;
+		return sprintf 'Etc/GMT%+i', $self->[4] / -3600
+			if $self->[4] <= 14*3600 && $self->[4] >= -12*3600;
+	}
+	return $self->[3];
+}
 sub epoch { my $self = shift; ($self->days//0) * 86400 + ($self->seconds//0) }
 sub type {
 	my $self = shift;
@@ -118,7 +126,7 @@ sub type {
 	return 'LOCAL TIME'
 		if ! $days &&   $seconds && ! $tz_offset && ! $tz_name;
 	return 'ZONED TIME'
-		if ! $days &&   $seconds &&   $tz_offset && ! $tz_name;
+		if ! $days &&   $seconds &&   $tz_offset;
 	return 'LOCAL DATETIME'
 		if   $days &&   $seconds && ! $tz_offset && ! $tz_name;
 	return 'ZONED DATETIME'

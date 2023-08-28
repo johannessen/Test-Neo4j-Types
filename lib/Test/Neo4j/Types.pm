@@ -380,7 +380,7 @@ sub neo4j_point_ok {
 sub _datetime_test {
 	my ($datetime_class, $new) = @_;
 	
-	plan tests => 6 * 7 + 1;
+	plan tests => 8 * 7 + 1;
 	
 	my ($dt, $p, $type);
 	
@@ -419,7 +419,7 @@ sub _datetime_test {
 	is $dt->nanoseconds, $p->{nanoseconds}, 'zoned time: nanoseconds';
 	is $dt->seconds, $p->{seconds}, 'zoned time: seconds';
 	is $dt->type, $type, 'zoned time: type';
-	is $dt->tz_name, $p->{tz_name}, 'zoned time: no tz_name';
+	is $dt->tz_name, 'Etc/GMT+8', 'zoned time: tz_name';
 	is $dt->tz_offset, $p->{tz_offset}, 'zoned time: tz_offset';
 	
 	$type = 'LOCAL DATETIME';
@@ -440,14 +440,14 @@ sub _datetime_test {
 		days        => 7252,   # 1989-11-09
 		seconds     => 61043,  # 17:57:23 UTC
 		nanoseconds => 0,
-		tz_offset   => 3600,   # +1 h
+		tz_offset   => 5400,   # +1.5 h
 	});
 	is $dt->days, $p->{days}, 'zoned datetime (offset): days';
 	is $dt->epoch, 626633843, 'zoned datetime (offset): epoch';
 	is $dt->nanoseconds, $p->{nanoseconds}, 'zoned datetime (offset): nanoseconds';
 	is $dt->seconds, $p->{seconds}, 'zoned datetime (offset): seconds';
 	is $dt->type, $type, 'zoned datetime (offset): type';
-	is $dt->tz_name, $p->{tz_name}, 'zoned datetime (offset): no tz_name';
+	is $dt->tz_name, undef, 'zoned datetime (half hour offset): no tz_name';
 	is $dt->tz_offset, $p->{tz_offset}, 'zoned datetime (offset): tz_offset';
 	
 	$dt = $new->($datetime_class, $p = {
@@ -463,6 +463,32 @@ sub _datetime_test {
 	is $dt->type, $type, 'zoned datetime: type';
 	is $dt->tz_name, $p->{tz_name}, 'zoned datetime: tz_name';
 	is $dt->tz_offset, $p->{tz_offset}, 'zoned datetime: no tz_offset';
+	
+	$dt = $new->($datetime_class, $p = {
+		days        => 0,
+		seconds     => 0,
+		tz_offset   => 0,  # GMT
+	});
+	is $dt->days, 0, 'zoned datetime (zero offset): days';
+	is $dt->epoch, 0, 'zoned datetime (zero offset): epoch';
+	is $dt->nanoseconds, 0, 'zoned datetime (zero offset): nanoseconds';
+	is $dt->seconds, 0, 'zoned datetime (zero offset): seconds';
+	is $dt->type, $type, 'zoned datetime (zero offset): type';
+	is $dt->tz_name, 'Etc/GMT', 'zoned datetime (zero offset): tz_name';
+	is $dt->tz_offset, 0, 'zoned datetime (zero offset): tz_offset';
+	
+	$dt = $new->($datetime_class, $p = {
+		days        => 0,
+		seconds     => 0,
+		tz_offset   => 86400,  # Zone Etc/GMT-24 doesn't exist
+	});
+	is $dt->days, 0, 'zoned datetime (large offset): days';
+	is $dt->epoch, 0, 'zoned datetime (large offset): epoch';
+	is $dt->nanoseconds, 0, 'zoned datetime (large offset): nanoseconds';
+	is $dt->seconds, 0, 'zoned datetime (large offset): seconds';
+	is $dt->type, $type, 'zoned datetime (large offset): type';
+	is $dt->tz_name, undef, 'zoned datetime (large offset): no tz_name';
+	is $dt->tz_offset, 86400, 'zoned datetime (large offset): tz_offset';
 	
 	ok $dt->DOES('Neo4j::Types::DateTime'), 'does role';
 }
