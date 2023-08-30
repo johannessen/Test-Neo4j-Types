@@ -15,7 +15,7 @@ neo4j_relationship_ok 'Neo4j_Test::Rel', \&Neo4j_Test::Rel::new;
 
 neo4j_path_ok 'Neo4j_Test::Path', \&Neo4j_Test::Path::new;
 
-neo4j_point_ok 'Neo4j_Test::Point';
+neo4j_point_ok 'Neo4j_Test::Point', \&Neo4j_Test::Point::new;
 
 neo4j_datetime_ok 'Neo4j_Test::DateTime', \&Neo4j_Test::DateTime::new;
 
@@ -89,12 +89,11 @@ sub DOES { $_[1] eq 'Neo4j::Types::Point' }
 sub srid { shift->[1] }
 sub coordinates { @{shift->[0]} }
 sub new {
-	my ($class, $srid, @coordinates) = @_;
-	my $dim = { 4326 => 2, 4979 => 3, 7203 => 2, 9157 => 3 }->{$srid // 0};
-	die "Unsupported SRID ".($srid//"") unless defined $dim;
-	die "Points with SRID $srid must have $dim dimensions" if @coordinates < $dim;
-	die unless defined $dim && @coordinates >= $dim;  # this alone is enough
-	return bless [ [@coordinates[0 .. $dim - 1]], $srid ], $class;
+	my ($class, $params) = @_;
+	bless [
+		$params->{coordinates},
+		$params->{srid},
+	], $class;
 }
 
 

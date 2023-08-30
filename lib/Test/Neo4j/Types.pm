@@ -258,28 +258,22 @@ sub neo4j_path_ok {
 
 
 sub _point_test {
-	my ($point_class) = @_;
+	my ($point_class, $new) = @_;
 	
-	plan tests => (9-6)+3 + (9-6)+3+3+3+2 + 6+6+6+6 + 1;
+	plan tests => 3+3 + 3+3+3+3+2 + 1;
 	
 	my (@c, $p);
 	
 	
 	# Simple point, location in real world
 	@c = ( 2.294, 48.858, 396 );
-	$p = $point_class->new( 4979, @c );
+	$p = $new->( $point_class, { srid => 4979, coordinates => [@c] });
 	is $p->srid(), 4979, 'eiffel srid';
-# 	is $p->X(), 2.294, 'eiffel X';
-# 	is $p->Y(), 48.858, 'eiffel Y';
-# 	is $p->Z(), 396, 'eiffel Z';
-# 	is $p->longitude(), 2.294, 'eiffel lon';
-# 	is $p->latitude(), 48.858, 'eiffel lat';
-# 	is $p->height(), 396, 'eiffel ellipsoidal height';
 	is_deeply [$p->coordinates], [@c], 'eiffel coords';
 	is scalar ($p->coordinates), 3, 'scalar context eiffel coords';
 	
 	@c = ( 2.294, 48.858 );
-	$p = $point_class->new( 4326, @c );
+	$p = $new->( $point_class, { srid => 4326, coordinates => [@c] });
 	is $p->srid(), 4326, 'eiffel 2d srid';
 	is_deeply [$p->coordinates], [@c], 'eiffel 2d coords';
 	is scalar ($p->coordinates), 2, 'scalar context eiffel 2d coords';
@@ -287,83 +281,33 @@ sub _point_test {
 	
 	# Other SRSs, location not in real world
 	@c = ( 12, 34 );
-	$p = $point_class->new( 7203, @c );
+	$p = $new->( $point_class, { srid => 7203, coordinates => [@c] });
 	is $p->srid(), 7203, 'plane srid';
-# 	is $p->X(), 12, 'plane X';
-# 	is $p->Y(), 34, 'plane Y';
-# 	ok ! defined $p->Z(), 'plane Z';
-# 	is $p->longitude(), 12, 'plane lon';
-# 	is $p->latitude(), 34, 'plane lat';
-# 	ok ! defined $p->height(), 'plane height';
 	is_deeply [$p->coordinates], [@c], 'plane coords';
 	is scalar ($p->coordinates), 2, 'scalar context plane coords';
 	
 	@c = ( 56, 78, 90 );
-	$p = $point_class->new( 9157, @c );
+	$p = $new->( $point_class, { srid => 9157, coordinates => [@c] });
 	is $p->srid(), 9157, 'space srid';
 	is_deeply [$p->coordinates], [@c], 'space coords';
 	is scalar ($p->coordinates), 3, 'scalar context space coords';
 	
 	@c = ( 361, -91 );
-	$p = $point_class->new( 4326, @c );
+	$p = $new->( $point_class, { srid => 4326, coordinates => [@c] });
 	is $p->srid(), 4326, 'ootw srid';
 	is_deeply [$p->coordinates], [@c], 'ootw coords';
 	is scalar ($p->coordinates), 2, 'scalar context ootw coords';
 	
 	@c = ( 'what', 'ever' );
-	$p = $point_class->new( '4326', @c );
+	$p = $new->( $point_class, { srid => '4326', coordinates => [@c] });
 	is $p->srid(), '4326', 'string srid';
 	is_deeply [$p->coordinates], [@c], 'string coords';
 	is scalar ($p->coordinates), 2, 'scalar context string coords';
 	
 	@c = ( undef, 45 );
-	$p = $point_class->new( 7203, @c );
+	$p = $new->( $point_class, { srid => 7203, coordinates => [@c] });
 	is_deeply [$p->coordinates], [@c], 'undef coord';
 	is scalar ($p->coordinates), 2, 'scalar context undef coord';
-	
-	
-	# Failure behaviour for incorrect number of coordinates supplied to the constructor
-	@c = ( 42 );
-	throws_ok { $point_class->new( 4326, @c ) } qr/\bdimensions\b/i, 'new 4326 X fails';
-	throws_ok { $point_class->new( 4979, @c ) } qr/\bdimensions\b/i, 'new 4979 X fails';
-	throws_ok { $point_class->new( 7203, @c ) } qr/\bdimensions\b/i, 'new 7203 X fails';
-	throws_ok { $point_class->new( 9157, @c ) } qr/\bdimensions\b/i, 'new 9157 X fails';
-	throws_ok { $point_class->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 X fails';
-	throws_ok { $point_class->new( undef, @c ) } qr/\bSRID\b/i, 'new undef X fails';
-	
-	@c = ( 2.294, 48.858 );
-	$p = $point_class->new( 4326, @c );
-	is_deeply [$p->coordinates], [@c[0..1]], 'new 4326';
-	throws_ok { $point_class->new( 4979, @c ) } qr/\bdimensions\b/i, 'new 4979 XY fails';
-	$p = $point_class->new( 7203, @c );
-	is_deeply [$p->coordinates], [@c[0..1]], 'new 7203';
-	throws_ok { $point_class->new( 9157, @c ) } qr/\bdimensions\b/i, 'new 9157 XY fails';
-	throws_ok { $point_class->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XY fails';
-	throws_ok { $point_class->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XY fails';
-	
-	@c = ( 2.294, 48.858, 396 );
-	$p = $point_class->new( 4326, @c );
-	is_deeply [$p->coordinates], [@c[0..1]], 'new 4326 Z ignored';
-	$p = $point_class->new( 4979, @c );
-	is_deeply [$p->coordinates], [@c[0..2]], 'new 4979';
-	$p = $point_class->new( 7203, @c );
-	is_deeply [$p->coordinates], [@c[0..1]], 'new 7203 Z ignored';
-	$p = $point_class->new( 9157, @c );
-	is_deeply [$p->coordinates], [@c[0..2]], 'new 9157';
-	throws_ok { $point_class->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XYZ fails';
-	throws_ok { $point_class->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XYZ fails';
-	
-	@c = ( 2.294, 48.858, 396, 13 );
-	$p = $point_class->new( 4326, @c );
-	is_deeply [$p->coordinates], [@c[0..1]], 'new 4326 ZM ignored';
-	$p = $point_class->new( 4979, @c );
-	is_deeply [$p->coordinates], [@c[0..2]], 'new 4979 M ignored';
-	$p = $point_class->new( 7203, @c );
-	is_deeply [$p->coordinates], [@c[0..1]], 'new 7203 ZM ignored';
-	$p = $point_class->new( 9157, @c );
-	is_deeply [$p->coordinates], [@c[0..2]], 'new 9157 M ignored';
-	throws_ok { $point_class->new( 12345, @c ) } qr/\bUnsupported\b/i, 'new 12345 XYZM fails';
-	throws_ok { $point_class->new( undef, @c ) } qr/\bSRID\b/i, 'new undef XYZM fails';
 	
 	
 	ok $p->DOES('Neo4j::Types::Point'), 'does role';
@@ -371,9 +315,9 @@ sub _point_test {
 
 
 sub neo4j_point_ok {
-	my ($class, $name) = @_;
+	my ($class, $new, $name) = @_;
 	$name //= "neo4j_point_ok '$class'";
-	subtest $name, sub { _point_test($class) };
+	subtest $name, sub { _point_test($class, $new) };
 }
 
 

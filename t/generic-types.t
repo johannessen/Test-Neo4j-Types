@@ -8,17 +8,26 @@ use Test::Neo4j::Types;
 
 plan skip_all => 'Skipping Neo4j::Types::Generic::* tests - not available'
 	unless eval {
+		require Neo4j::Types::Generic::Point;
 		require Neo4j::Types::Generic::DateTime;
 		require Neo4j::Types::Generic::Duration;
 		return 1;
 	};
 
-plan tests => 4;
+plan tests => 5;
 
 
 # These packages simply check the unreleased Neo4j::Types 2.00
 # generic implementations, as far as they exist already.
 
+
+neo4j_point_ok 'Neo4j::Types::Generic::Point', sub {
+	my ($class, $params) = @_;
+	Neo4j::Types::Generic::Point->new(
+		$params->{srid},
+		@{$params->{coordinates}},
+	);
+};
 
 neo4j_datetime_ok 'Neo4j::Types::Generic::DateTime', sub {
 	my ($class, $params) = @_;

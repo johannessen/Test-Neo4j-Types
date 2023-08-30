@@ -45,7 +45,7 @@ L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/n
  };
  
  # For spatial / temporal data structures:
- neo4j_point_ok 'Local::Point';
+ neo4j_point_ok 'Local::Point', sub {...};
  neo4j_datetime_ok 'Local::Temporal::Instant', sub {...};
  neo4j_duration_ok 'Local::Temporal::Duration', sub {...};
 
@@ -169,22 +169,25 @@ other than C<< ->DOES() >> on these references may fail.
 
 =head2 neo4j_point_ok
 
- neo4j_point_ok $point_class;
- neo4j_point_ok $point_class, $subtest_name;
+ sub point_new ($class, $params) {
+   return bless { ... }, $class;
+ }
+ neo4j_point_ok $point_class, \&point_new;
+ neo4j_point_ok $point_class, \&point_new, $subtest_name;
 
 Verifies that C<$point_class> is a package that implements
 the interface specified for spatial points by L<Neo4j::Types>.
 
-Note that unlike the other test tools, this one doesn't
-need a constructor sub reference. L<Neo4j::Types::Point>
-requires one anyway because Point is a Neo4j property type,
-which means it should in theory be possible to construct
-points without using Cypher.
-(However, passing of Point values as parameters is not
-currently implemented in any known CPAN module.)
+C<\&point_new> must be a reference to a subroutine that can
+construct a new node of the type C<$point_class> based
+on the parameters provided in the hash ref C<$params>.
+The parameters have names exactly matching the methods in
+L<Neo4j::Types::Point>:
 
-With all that said, this test tool may change in future, even
-independent of the reasons stated in L</"BUGS AND LIMITATIONS">.
+ $params = {
+   srid        => 4326,
+   coordinates => [ $x, $y, $z ],
+ };
 
 =head2 neo4j_relationship_ok
 
