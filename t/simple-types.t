@@ -71,8 +71,11 @@ sub new {
 package Neo4j_Test::Path;
 sub DOES { $_[1] eq 'Neo4j::Types::Path' }
 
-use List::Util 1.56 'mesh';
-sub elements { grep { defined } mesh $_[0]->{n}, $_[0]->{r} }
+sub elements {
+	grep { defined }
+	map { ( $_[0]->{n}[$_], $_[0]->{r}[$_] ) }
+	( 0 .. @{$_[0]->{n}} - 1 )
+}
 sub nodes { @{shift->{n}} }
 sub relationships { @{shift->{r}} }
 sub new {
