@@ -92,7 +92,7 @@ sub _node_test {
 	});
 	is $n->id(), 0, 'id 0';
 	is ref($n->get('0')), 'ARRAY', 'get 0 ref';
-	is scalar(@{$n->get('0')}), 0, 'get 0 empty';
+	lives_and { is scalar(@{$n->get('0')}), 0 } 'get 0 empty';
 	$p = $n->properties;
 	is_deeply $p, {0=>[]}, 'props deeply';
 	is_deeply [$n->properties], [{0=>[]}], 'props list context';
@@ -156,7 +156,7 @@ sub _relationship_test {
 	});
 	is $r->id(), 0, 'id 0';
 	is ref($r->get('0')), 'ARRAY', 'get 0 ref';
-	is scalar(@{$r->get('0')}), 0, 'get 0 empty';
+	lives_and { is scalar(@{$r->get('0')}), 0 } 'get 0 empty';
 	$p = $r->properties;
 	is_deeply $p, {0=>[]}, 'props deeply';
 	is_deeply [$r->properties], [{0=>[]}], 'props list context';
