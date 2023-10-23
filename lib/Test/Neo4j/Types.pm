@@ -118,7 +118,7 @@ sub _node_test {
 
 sub neo4j_node_ok {
 	my ($class, $new, $name) = @_;
-	$name //= "neo4j_node_ok '$class'";
+	$name = "neo4j_node_ok '$class'" unless defined $name;
 	subtest $name, sub { _node_test($class, $new) };
 }
 
@@ -188,7 +188,7 @@ sub _relationship_test {
 
 sub neo4j_relationship_ok {
 	my ($class, $new, $name) = @_;
-	$name //= "neo4j_relationship_ok '$class'";
+	$name = "neo4j_relationship_ok '$class'" unless defined $name;
 	subtest $name, sub { _relationship_test($class, $new) };
 }
 
@@ -252,7 +252,7 @@ sub _path_test {
 
 sub neo4j_path_ok {
 	my ($class, $new, $name) = @_;
-	$name //= "neo4j_path_ok '$class'";
+	$name = "neo4j_path_ok '$class'" unless defined $name;
 	subtest $name, sub { _path_test($class, $new) };
 }
 
@@ -316,7 +316,7 @@ sub _point_test {
 
 sub neo4j_point_ok {
 	my ($class, $new, $name) = @_;
-	$name //= "neo4j_point_ok '$class'";
+	$name = "neo4j_point_ok '$class'" unless defined $name;
 	subtest $name, sub { _point_test($class, $new) };
 }
 
@@ -324,7 +324,7 @@ sub neo4j_point_ok {
 sub _datetime_test {
 	my ($datetime_class, $new) = @_;
 	
-	plan tests => 8 * 7 + 1;
+	plan tests => 9 * 7 + 1;
 	
 	my ($dt, $p, $type);
 	
@@ -434,13 +434,26 @@ sub _datetime_test {
 	is $dt->tz_name, undef, 'zoned datetime (large offset): no tz_name';
 	is $dt->tz_offset, 86400, 'zoned datetime (large offset): tz_offset';
 	
+	$dt = $new->($datetime_class, $p = {
+		days        => 0,
+		nanoseconds => 0,
+		tz_offset   => -72000,  # Zone Etc/GMT+20 doesn't exist
+	});
+	is $dt->days, 0, 'zoned datetime (large offset): days';
+	is $dt->epoch, 0, 'zoned datetime (large offset): epoch';
+	is $dt->nanoseconds, 0, 'zoned datetime (large offset): nanoseconds';
+	is $dt->seconds, 0, 'zoned datetime (large offset): seconds';
+	is $dt->type, $type, 'zoned datetime (large offset): type';
+	is $dt->tz_name, undef, 'zoned datetime (large offset): no tz_name';
+	is $dt->tz_offset, -72000, 'zoned datetime (large offset): tz_offset';
+	
 	ok $dt->DOES('Neo4j::Types::DateTime'), 'does role';
 }
 
 
 sub neo4j_datetime_ok {
 	my ($class, $new, $name) = @_;
-	$name //= "neo4j_datetime_ok '$class'";
+	$name = "neo4j_datetime_ok '$class'" unless defined $name;
 	subtest $name, sub { _datetime_test($class, $new) };
 }
 
@@ -484,7 +497,7 @@ sub _duration_test {
 
 sub neo4j_duration_ok {
 	my ($class, $new, $name) = @_;
-	$name //= "neo4j_duration_ok '$class'";
+	$name = "neo4j_duration_ok '$class'" unless defined $name;
 	subtest $name, sub { _duration_test($class, $new) };
 }
 
