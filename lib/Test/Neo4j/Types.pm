@@ -41,7 +41,6 @@ sub _element_id_test {
 		dies_ok  { $both->element_id } 'optional op element_id' if ! $both->can('element_id');
 		SKIP: {
 			skip 'optional op element_id unimplemented', 2+3 unless $class->can('element_id');
-			no strict 'refs';
 			my ($element_id, $id) = map { "$prefix$_" } qw( element_id id );
 			
 			# When both IDs are present, id() MAY warn
