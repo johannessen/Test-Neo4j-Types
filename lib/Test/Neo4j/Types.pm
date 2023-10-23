@@ -418,7 +418,7 @@ sub _datetime_test {
 	is $dt->nanoseconds, 0, 'zoned datetime (zero offset): nanoseconds';
 	is $dt->seconds, 0, 'zoned datetime (zero offset): seconds';
 	is $dt->type, $type, 'zoned datetime (zero offset): type';
-	is $dt->tz_name, 'Etc/GMT', 'zoned datetime (zero offset): tz_name';
+	like $dt->tz_name, qr<^Etc/GMT(?:[-+]0)?$>, 'zoned datetime (zero offset): tz_name';
 	is $dt->tz_offset, 0, 'zoned datetime (zero offset): tz_offset';
 	
 	$dt = $new->($datetime_class, $p = {
