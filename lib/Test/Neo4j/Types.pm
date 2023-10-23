@@ -452,23 +452,31 @@ sub _duration_test {
 	
 	my $d;
 	
+	# Whether ISO 8601 allows negative quantities isn't entirely clear.
+	# But it does seem to make sense to allow them.
+	# However, the Neo4j server may have bugs related to this;
+	# e. g. in Neo4j 5.6, duration({months: 1, days: -1}) yields P29D,
+	# which is definitely wrong: A month must not be assumed to have a
+	# length of any particular number of days, therefore subtracting
+	# one day from a duration never changes the months count.
+	
 	$d = $new->($duration_class, {
 		months => 18,
-		seconds => 172800,
+		seconds => -172800,
 	});
 	is $d->months, 18, 'months';
 	is $d->days, 0, 'no days yields zero';
-	is $d->seconds, 172800, 'seconds';
+	is $d->seconds, -172800, 'seconds';
 	is $d->nanoseconds, 0, 'no nanoseconds yields zero';
 	
 	$d = $new->($duration_class, {
 		days => -42,
-		nanoseconds => -2000,
+		nanoseconds => 2000,
 	});
 	is $d->months, 0, 'no months yields zero';
 	is $d->days, -42, 'days';
 	is $d->seconds, 0, 'no seconds yields zero';
-	is $d->nanoseconds, -2000, 'nanoseconds';
+	is $d->nanoseconds, 2000, 'nanoseconds';
 	
 	ok $d->DOES('Neo4j::Types::Duration'), 'does role';
 }
