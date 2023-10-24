@@ -41,11 +41,14 @@ sub _load_module_ok {
 	# load the module (checking for this can detect bugs where the
 	# user expects their code to load the module, but it actually
 	# doesn't get loaded).
-	(my $file = $package) =~ s<::></>g;
-	$file .= '.pm';
-	return 1 if $INC{$file};
-	require $file;
+	{
+		# Look for entries in the package's symbol table
+		no strict 'refs';
+		return 1 if keys %{"${package}::"};
+	}
 	diag "$package is not loaded";
+	$package =~ s<::></>g;
+	require "$package.pm";
 	fail $name;
 	return 0;
 }
