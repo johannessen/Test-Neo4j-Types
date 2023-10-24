@@ -21,8 +21,8 @@ BEGIN { our @EXPORT = qw(
 )}
 
 {
-	# This happens within new versions of Neo4j/Types.pm,
-	# but we can't be sure the version is new enough:
+	# This happens within Neo4j/Types.pm version 1.08 and newer,
+	# but we can't be sure the installed version is that new:
 	package # local
 	        Neo4j::Types;
 	use warnings::register;

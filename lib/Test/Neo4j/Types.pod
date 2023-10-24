@@ -55,8 +55,15 @@ Offers a simple way to test your Neo4j::Types implementation for
 correctness. These test tools not only verify that the required
 methods are provided, they also try to verify that the methods
 actually work as expected. While the checks provided by this
-module certainly won't cover all requirements, they will cover
+module certainly don't cover all requirements, they do cover
 many of them.
+
+It is anticipated that the checks these tools perform will be
+expanded in future. If this worries you, you should consider
+only using these tools for author tests.
+That said, if your code is on CPAN and declares this module
+as a dependency, the author of this module will take every
+effort to avoid problems caused by such changes.
 
 =head1 FUNCTIONS
 
