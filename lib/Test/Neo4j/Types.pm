@@ -29,6 +29,28 @@ BEGIN { our @EXPORT = qw(
 }
 
 
+sub _load_module_ok {
+	my ($name, $package) = @_;
+	
+	# We want the test to fail if the module hasn't been loaded, but the
+	# error message you get normally isn't very helpful. So this sub will
+	# check if the module is loaded and return true if that's the case.
+	# Otherwise, it will try to load the module. No eval means that if
+	# loading fails, users get the original error message. If loading
+	# succeeds, we fail the test anyway because the user is supposed to
+	# load the module (checking for this can detect bugs where the
+	# user expects their code to load the module, but it actually
+	# doesn't get loaded).
+	(my $file = $package) =~ s<::></>g;
+	$file .= '.pm';
+	return 1 if $INC{$file};
+	require $file;
+	diag "$package is not loaded";
+	fail $name;
+	return 0;
+}
+
+
 sub _element_id_test {
 	my ($BOTH, $ID_ONLY, $new, $class, $prefix) = @_;
 	
@@ -118,6 +140,7 @@ sub _node_test {
 sub neo4j_node_ok {
 	my ($class, $new, $name) = @_;
 	$name = "neo4j_node_ok '$class'" unless defined $name;
+	_load_module_ok($name, $class) and
 	subtest $name, sub { _node_test($class, $new) };
 }
 
@@ -188,6 +211,7 @@ sub _relationship_test {
 sub neo4j_relationship_ok {
 	my ($class, $new, $name) = @_;
 	$name = "neo4j_relationship_ok '$class'" unless defined $name;
+	_load_module_ok($name, $class) and
 	subtest $name, sub { _relationship_test($class, $new) };
 }
 
@@ -252,6 +276,7 @@ sub _path_test {
 sub neo4j_path_ok {
 	my ($class, $new, $name) = @_;
 	$name = "neo4j_path_ok '$class'" unless defined $name;
+	_load_module_ok($name, $class) and
 	subtest $name, sub { _path_test($class, $new) };
 }
 
@@ -316,6 +341,7 @@ sub _point_test {
 sub neo4j_point_ok {
 	my ($class, $new, $name) = @_;
 	$name = "neo4j_point_ok '$class'" unless defined $name;
+	_load_module_ok($name, $class) and
 	subtest $name, sub { _point_test($class, $new) };
 }
 
@@ -453,6 +479,7 @@ sub _datetime_test {
 sub neo4j_datetime_ok {
 	my ($class, $new, $name) = @_;
 	$name = "neo4j_datetime_ok '$class'" unless defined $name;
+	_load_module_ok($name, $class) and
 	subtest $name, sub { _datetime_test($class, $new) };
 }
 
@@ -497,6 +524,7 @@ sub _duration_test {
 sub neo4j_duration_ok {
 	my ($class, $new, $name) = @_;
 	$name = "neo4j_duration_ok '$class'" unless defined $name;
+	_load_module_ok($name, $class) and
 	subtest $name, sub { _duration_test($class, $new) };
 }
 
