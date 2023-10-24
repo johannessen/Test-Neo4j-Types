@@ -15,17 +15,16 @@ L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/n
 
 =head1 SYNOPSIS
 
- # For a node class that happens to have a new()
- # constructor with parameters that match the ones
- # given here exactly:
- neo4j_node_ok 'Local::Node', \&Local::Node::new;
- 
  # For a node data structure that happens to match
  # the given parameters exactly:
  neo4j_node_ok 'Local::Node', sub {
    my ($class, $params) = @_;
    return bless { %$params }, $class;
  };
+ 
+ # For a node class that happens to already have
+ # a new() constructor exactly like that:
+ neo4j_node_ok 'Local::Node', \&Local::Node::new;
  
  # For a relationship data structure that needs
  # adapting from the given parameters:
