@@ -501,13 +501,13 @@ sub neo4j_duration_ok {
 }
 
 
-package # private
-        Test::Neo4j::Types::PathNode;
+package Test::Neo4j::Types::PathNode;
+
 sub DOES { $_[1] eq 'Neo4j::Types::Node' }
 
 
-package # private
-        Test::Neo4j::Types::PathRel;
+package Test::Neo4j::Types::PathRel;
+
 sub DOES { $_[1] eq 'Neo4j::Types::Relationship' }
 
 
