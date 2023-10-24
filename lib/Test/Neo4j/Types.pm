@@ -451,26 +451,26 @@ sub _datetime_test {
 		seconds     => 0,
 		tz_offset   => 86400,  # Zone Etc/GMT-24 doesn't exist
 	});
-	is $dt->days, 0, 'zoned datetime (large offset): days';
-	is $dt->epoch, 0, 'zoned datetime (large offset): epoch';
-	is $dt->nanoseconds, 0, 'zoned datetime (large offset): nanoseconds';
-	is $dt->seconds, 0, 'zoned datetime (large offset): seconds';
-	is $dt->type, $type, 'zoned datetime (large offset): type';
-	is $dt->tz_name, undef, 'zoned datetime (large offset): no tz_name';
-	is $dt->tz_offset, 86400, 'zoned datetime (large offset): tz_offset';
+	is $dt->days, 0, 'zoned datetime (too high offset): days';
+	is $dt->epoch, 0, 'zoned datetime (too high offset): epoch';
+	is $dt->nanoseconds, 0, 'zoned datetime (too high offset): nanoseconds';
+	is $dt->seconds, 0, 'zoned datetime (too high offset): seconds';
+	is $dt->type, $type, 'zoned datetime (too high offset): type';
+	is $dt->tz_name, undef, 'zoned datetime (too high offset): no tz_name';
+	is $dt->tz_offset, 86400, 'zoned datetime (too high offset): tz_offset';
 	
 	$dt = $new->($datetime_class, $p = {
 		days        => 0,
 		nanoseconds => 0,
 		tz_offset   => -72000,  # Zone Etc/GMT+20 doesn't exist
 	});
-	is $dt->days, 0, 'zoned datetime (large offset): days';
-	is $dt->epoch, 0, 'zoned datetime (large offset): epoch';
-	is $dt->nanoseconds, 0, 'zoned datetime (large offset): nanoseconds';
-	is $dt->seconds, 0, 'zoned datetime (large offset): seconds';
-	is $dt->type, $type, 'zoned datetime (large offset): type';
-	is $dt->tz_name, undef, 'zoned datetime (large offset): no tz_name';
-	is $dt->tz_offset, -72000, 'zoned datetime (large offset): tz_offset';
+	is $dt->days, 0, 'zoned datetime (too low offset): days';
+	is $dt->epoch, 0, 'zoned datetime (too low offset): epoch';
+	is $dt->nanoseconds, 0, 'zoned datetime (too low offset): nanoseconds';
+	is $dt->seconds, 0, 'zoned datetime (too low offset): seconds';
+	is $dt->type, $type, 'zoned datetime (too low offset): type';
+	is $dt->tz_name, undef, 'zoned datetime (too low offset): no tz_name';
+	is $dt->tz_offset, -72000, 'zoned datetime (too low offset): tz_offset';
 	
 	ok $dt->DOES('Neo4j::Types::DateTime'), 'does role';
 }
