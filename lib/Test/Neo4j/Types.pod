@@ -160,13 +160,15 @@ The parameter is an array of references that alternate
 between nodes and relationships, matching the method
 L<Neo4j::Types::Path/"elements">:
 
- $elements = [
-   $node_0,
-   $relationship_0,
-   $node_1,
-   $relationship_1,
-   $node_2,
- ];
+ $params = {
+   elements => [
+     $node_0,
+     $relationship_0,
+     $node_1,
+     $relationship_1,
+     $node_2,
+   ],
+ };
 
 Inside C<path_new>, these references will purport to perform
 the L<Neo4j::Types::Node> and L<Neo4j::Types::Relationship>
