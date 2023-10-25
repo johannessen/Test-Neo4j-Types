@@ -56,7 +56,8 @@ sub elements {
 sub nodes { @{shift->{n}} }
 sub relationships { @{shift->{r}} }
 sub new {
-	my ($class, $elements) = @_;
+	my ($class, $params) = @_;
+	my $elements = $params->{elements};
 	my @n = grep {$_->DOES('Neo4j::Types::Node')} @$elements;
 	my @r = grep {$_->DOES('Neo4j::Types::Relationship')} @$elements;
 	bless { n => \@n, r => \@r }, $class;

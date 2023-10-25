@@ -232,7 +232,7 @@ sub _path_test {
 	};
 	
 	@p = $new_path->( \6, \7, \8 );
-	$p = $new->($path_class, \@p);
+	$p = $new->($path_class, { elements => \@p });
 	@e = $p->elements;
 	is_deeply [@e], [@p], 'deeply elements 3';
 	@e = $p->nodes;
@@ -241,7 +241,7 @@ sub _path_test {
 	is_deeply [@e], [$p[1]], 'deeply rel 1';
 	
 	@p = $new_path->( \9 );
-	$p = $new->($path_class, \@p);
+	$p = $new->($path_class, { elements => \@p });
 	@e = $p->elements;
 	is_deeply [@e], [@p], 'deeply elements 1';
 	@e = $p->nodes;
@@ -250,7 +250,7 @@ sub _path_test {
 	is_deeply [@e], [], 'deeply rel 0';
 	
 	@p = $new_path->( \1, \2, \3, \4, \5 );
-	$p = $new->($path_class, \@p);
+	$p = $new->($path_class, { elements => \@p });
 	@e = $p->elements;
 	is_deeply [@e], [@p], 'deeply elements 5';
 	lives_and { is scalar($p->elements), 5 } 'scalar context elements';
@@ -261,7 +261,7 @@ sub _path_test {
 	is_deeply [@e], [$p[1],$p[3]], 'deeply rel 2';
 	lives_and { is scalar($p->relationships), 2 } 'scalar context relationships';
 	
-	$p = $new->($path_class, []);
+	$p = $new->($path_class, { elements => [] });
 	@e = $p->elements;
 	is scalar(@e), 0, 'no elements gigo';
 	lives_and { is scalar($p->elements), 0 } 'scalar context no elements';

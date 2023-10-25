@@ -39,8 +39,8 @@ L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/n
  
  # For the typical path data structure:
  neo4j_path_ok 'Local::Path', sub {
-   my ($class, $elements) = @_;
-   return bless [ @$elements ], $class;
+   my ($class, $params) = @_;
+   return bless [ $params->{elements}->@* ], $class;
  };
  
  # For spatial / temporal data structures:
@@ -144,8 +144,8 @@ L<Neo4j::Types::Node>:
 
 =head2 neo4j_path_ok
 
- sub path_new ($class, $elements) {
-   return bless [ @$elements ], $class;
+ sub path_new ($class, $params) {
+   return bless { ... }, $class;
  }
  neo4j_path_ok $path_class, \&path_new;
  neo4j_path_ok $path_class, \&path_new, $subtest_name;
@@ -155,10 +155,10 @@ the interface specified for paths by L<Neo4j::Types>.
 
 C<\&path_new> must be a reference to a subroutine that can
 construct a new path of the type C<$path_class> based
-on the elements provided in the array ref C<$elements>.
-The elements are alternating between references that
-represent nodes and relationships in the exact same order
-as for L<Neo4j::Types::Path/"elements">:
+on the parameter provided in the hash ref C<$params>.
+The parameter is an array of references that alternate
+between nodes and relationships, matching the method
+L<Neo4j::Types::Path/"elements">:
 
  $elements = [
    $node_0,

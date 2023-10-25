@@ -23,7 +23,7 @@ neo4j_relationship_ok 'Neo4j::Bolt::Relationship', sub {
 	}, $class;
 };
 
-neo4j_path_ok 'Neo4j::Bolt::Path', sub { bless pop, shift };
+neo4j_path_ok 'Neo4j::Bolt::Path', sub { bless pop->{elements}, shift };
 
 
 done_testing;
