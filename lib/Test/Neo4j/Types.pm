@@ -77,7 +77,7 @@ sub _element_id_test {
 			ok @w_eid, "no $element_id warns";
 			warn @w_eid if @w_eid > 1;
 			no warnings 'Neo4j::Types';
-			is warnings { $id_only->$element_id() }, @w_eid - 1, "no $element_id warn cat is Neo4j::Types";
+			ok 1 + warnings { $id_only->$element_id() } == @w_eid, "no $element_id warn cat is Neo4j::Types";
 		};
 	};
 }
