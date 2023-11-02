@@ -8,9 +8,8 @@ be deemed successful, it will eventually be merged with the
 existing L<Neo4j-Types|https://metacpan.org/dist/Neo4j-Types>
 distribution.
 
-You probably shouldn't be using this module at this time, because
-the requirements it checks for are evolving and might shift under
-your feet at any moment. For further information, see
+Note that the requirements this module checks for are
+still evolving. For further information, see
 L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/neo4j-types/milestone/1>.
 
 =head1 SYNOPSIS
@@ -142,6 +141,9 @@ L<Neo4j::Types::Node>:
    properties => { key => 'value' },
  };
 
+An unavailable S<element ID> will during tests be
+represented by an undefined parameter value.
+
 =head2 neo4j_path_ok
 
  sub path_new ($class, $params) {
@@ -225,6 +227,9 @@ L<Neo4j::Types::Relationship>:
    type             => 'TYPE',
  };
 
+An unavailable S<element ID> will during tests be
+represented by an undefined parameter value.
+
 =head1 BUGS AND LIMITATIONS
 
 The diagnostics are not particularly great. All of these tools
@@ -254,8 +259,9 @@ perhaps adequate) way to implement this might be a global
 C<@Test::Neo4j::Types::no_warnings> variable, which users
 could then localise and configure as required.
 
-If these tools are ever developed further than this, switching
-to L<Test2::Manual::Tooling> should be considered.
+If these tools are ever developed further than this,
+L<switching to Test2|Test2::Manual::Tooling> should be
+considered.
 
 =head1 SEE ALSO
 
