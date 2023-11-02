@@ -1,6 +1,0 @@
-# PODNAME: Test::Neo4j::Types::meta
-# ABSTRACT: meta
-
-=head1 DESCRIPTION
-
-Nothing to see here. Move along.
