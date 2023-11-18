@@ -5,7 +5,6 @@ use lib qw(lib t/lib);
 
 use Test::More 0.88;
 use Test::Neo4j::Types;
-use Neo4j_Test::Simple;
 
 plan tests => 2;
 
@@ -23,7 +22,7 @@ done_testing;
 
 
 package Neo4j_Test::NodeExt;
-use parent -norequire, 'Neo4j_Test::Node';
+use parent 'Neo4j_Test::Node';
 
 sub element_id {
 	my $self = shift;
@@ -39,7 +38,7 @@ sub new {
 
 
 package Neo4j_Test::RelExt;
-use parent -norequire, 'Neo4j_Test::Rel';
+use parent 'Neo4j_Test::Rel';
 
 sub element_id {
 	my $self = shift;

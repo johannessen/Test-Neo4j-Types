@@ -5,10 +5,21 @@ use lib qw(lib t/lib);
 
 use Test::More 0.88;
 use Test::Neo4j::Types;
-use Neo4j_Test::Simple;
+
+use Neo4j_Test::Node;
+use Neo4j_Test::Rel;
+use Neo4j_Test::Path;
+use Neo4j_Test::Point;
+use Neo4j_Test::DateTime;
+use Neo4j_Test::Duration;
+use Neo4j_Test::ByteArray;
 
 plan tests => 7;
 
+
+# These packages intentionally use slightly unusual data structures
+# in order to confirm that the implementation of the testing tool
+# doesn't depend on details like that.
 
 neo4j_node_ok 'Neo4j_Test::Node', \&Neo4j_Test::Node::new;
 

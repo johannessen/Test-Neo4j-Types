@@ -5,7 +5,14 @@ use lib qw(lib t/lib);
 
 use Test::More 0.88;
 use Test::Neo4j::Types;
-use Neo4j_Test::Simple;
+
+use Neo4j_Test::Node;
+use Neo4j_Test::Rel;
+use Neo4j_Test::Path;
+use Neo4j_Test::Point;
+use Neo4j_Test::DateTime;
+use Neo4j_Test::Duration;
+use Neo4j_Test::ByteArray;
 
 plan tests => 7;
 
