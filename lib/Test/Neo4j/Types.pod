@@ -3,13 +3,15 @@
 
 =head1 OVERVIEW
 
-This module distribution is experimental. Should the experiment
-be deemed successful, it will eventually be merged with the
-existing L<Neo4j-Types|https://metacpan.org/dist/Neo4j-Types>
+This module distribution is experimental.
+The experiment is now deemed successful.
+This module distribution will soon be merged into the
+L<Neo4j-Types|https://metacpan.org/dist/Neo4j-Types>
 distribution.
 
-Note that the requirements this module checks for are
-still evolving. For further information, see
+There is an outside chance that the requirements this
+module checks for may change before the final release.
+For further information, see
 L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/neo4j-types/milestone/1>.
 
 =head1 SYNOPSIS
@@ -275,13 +277,6 @@ As a consequence of the subtests, it appears to be difficult
 to verify that these tools correctly identify non-conforming
 implementations, which is of course the primary job of these
 tools. So the testing of the tools themselves is incomplete.
-
-Optional / "should" requirements may need to be checked, with
-warnings or at least C<diag> messages issued if not met. These
-warnings need to be individually selectable. One (naive but
-perhaps adequate) way to implement this might be a global
-C<@Test::Neo4j::Types::no_warnings> variable, which users
-could then localise and configure as required.
 
 If these tools are ever developed further than this,
 L<switching to Test2|Test2::Manual::Tooling> should be
