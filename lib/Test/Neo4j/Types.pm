@@ -76,7 +76,7 @@ sub _element_id_test {
 			# For a missing element ID, element_id() returns the numeric ID and MUST warn
 			my @w_eid = warnings { is $id_only->$element_id(), $ID_ONLY->{$id}, "no $element_id with legacy $id" };
 			ok @w_eid, "no $element_id warns";
-			warn @w_eid if @w_eid > 1;
+			warn @w_eid if @w_eid > 1;  # uncoverable branch true
 			no warnings 'Neo4j::Types';
 			ok 1 + warnings { $id_only->$element_id() } == @w_eid, "no $element_id warn cat is Neo4j::Types";
 		};
@@ -557,7 +557,7 @@ sub _bytearray_test {
 
 sub neo4j_bytearray_ok {
 	my ($class, $new, $name) = @_;
-	$name //= "neo4j_bytearray_ok '$class'";
+	$name = "neo4j_bytearray_ok '$class'" unless defined $name;
 	_load_module_ok($name, $class) and
 	subtest $name, sub { _bytearray_test($class, $new) };
 }
