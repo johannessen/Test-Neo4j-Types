@@ -3,3 +3,8 @@ Revision history for Test-Neo4j-Types
 This experimental distribution does not provide a changelog.
 
 https://github.com/johannessen/Test-Neo4j-Types/commits/main
+
+
+0.08  2023-11-19
+
+ - Test::Neo4j::Types has been merged into the Neo4j-Types 2.00 distribution.

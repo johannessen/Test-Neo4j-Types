@@ -3,16 +3,9 @@
 
 =head1 OVERVIEW
 
-This module distribution is experimental.
-The experiment is now deemed successful.
-This module distribution will soon be merged into the
+This module has been merged into the
 L<Neo4j-Types|https://metacpan.org/dist/Neo4j-Types>
-distribution.
-
-There is an outside chance that the requirements this
-module checks for may change before the final release.
-For further information, see
-L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/neo4j-types/milestone/1>.
+distribution. It will be available in version 2.00.
 
 =head1 SYNOPSIS
 
@@ -45,7 +38,7 @@ L<johannessen/neo4j-types Version 2 (milestone)|https://github.com/johannessen/n
  };
  
  # For spatial / temporal data structures:
- neo4j_point_ok 'Local::Point', sub {...};
+ neo4j_point_ok 'Local::Spatial::Point', sub {...};
  neo4j_datetime_ok 'Local::Temporal::Instant', sub {...};
  neo4j_duration_ok 'Local::Temporal::Duration', sub {...};
  
@@ -61,11 +54,11 @@ actually work as expected. While the checks provided by this
 module certainly don't cover all requirements, they do cover
 many of them.
 
-It is anticipated that the checks these tools perform will be
+It's possible that the checks these tools perform will be
 expanded in future. If this worries you, you should consider
 only using these tools for author tests.
 That said, if your code is on CPAN and declares this module
-as a dependency, the author of this module will take every
+as a dependency, the author of this module will try to make every
 effort to avoid problems caused by such changes.
 
 =head1 FUNCTIONS
@@ -278,10 +271,12 @@ to verify that these tools correctly identify non-conforming
 implementations, which is of course the primary job of these
 tools. So the testing of the tools themselves is incomplete.
 
+=for comment (Test::Tester doesn't work with subtests.)
+
 If these tools are ever developed further than this,
 L<switching to Test2|Test2::Manual::Tooling> should be
 considered.
 
 =head1 SEE ALSO
 
-L<Neo4j::Types::ImplementorNotes|https://github.com/johannessen/neo4j-types/blob/main/lib/Neo4j/Types/ImplementorNotes.pod>
+L<Neo4j::Types::ImplementorNotes>

@@ -8,7 +8,7 @@ use Test::More 0.88;
 use Test::Neo4j::Types;
 
 
-# Verify that the test tools check that users loaded
+# Verify that the test tools check that users did load
 # the module and properly report if they haven't.
 
 my $diag = '';

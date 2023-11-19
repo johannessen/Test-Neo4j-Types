@@ -22,8 +22,8 @@ BEGIN { our @EXPORT = qw(
 )}
 
 {
-	# This happens within Neo4j/Types.pm version 1.08 and newer,
-	# but we can't be sure the installed version is that new:
+	# Workaround for warnings::register_categories() being unavailable
+	# in Perl v5.12 and earlier
 	package # local
 	        Neo4j::Types;
 	use warnings::register;
