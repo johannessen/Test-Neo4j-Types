@@ -538,20 +538,20 @@ sub _bytearray_test {
 	
 	plan tests => 1 + 2 + 1;
 	
-	my $d;
+	my $b;
 	
-	$d = $new->($bytearray_class, {
+	$b = $new->($bytearray_class, {
 		as_string => 'foo',
 	});
-	is $d->as_string, 'foo', 'bytes "foo"';
+	is $b->as_string, 'foo', 'bytes "foo"';
 	
-	$d = $new->($bytearray_class, {
+	$b = $new->($bytearray_class, {
 		as_string => "\x{100}",
 	});
-	ok ! utf8::is_utf8($d->as_string), 'wide char bytearray: UTF8 off';
-	ok length($d->as_string) > 1, 'wide char bytearray: multiple bytes';
+	ok ! utf8::is_utf8($b->as_string), 'wide char bytearray: UTF8 off';
+	ok length($b->as_string) > 1, 'wide char bytearray: multiple bytes';
 	
-	isa_ok $d, 'Neo4j::Types::ByteArray';
+	isa_ok $b, 'Neo4j::Types::ByteArray';
 }
 
 
