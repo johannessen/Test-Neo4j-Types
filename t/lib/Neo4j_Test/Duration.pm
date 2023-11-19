@@ -3,7 +3,7 @@ use warnings;
 
 
 package Neo4j_Test::Duration;
-sub DOES { $_[1] eq 'Neo4j::Types::Duration' }
+sub isa { $_[1] eq 'Neo4j::Types::Duration' }
 
 sub months { shift->[0] }
 sub days { shift->[1] }

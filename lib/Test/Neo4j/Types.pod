@@ -198,10 +198,10 @@ L<Neo4j::Types::Path/"elements">:
    ],
  };
 
-Inside C<path_new>, these references will purport to perform
-the L<Neo4j::Types::Node> and L<Neo4j::Types::Relationship>
-roles, but shall be treated as opaque. Calling any methods
-other than C<< ->DOES() >> on these references may fail.
+Inside C<path_new>, these references will purport to conform
+to the L<Neo4j::Types::Node> and L<Neo4j::Types::Relationship>
+interfaces, but shall be treated as opaque. Calling any methods
+other than C<< ->isa() >> on these references may fail.
 
 =head2 neo4j_point_ok
 

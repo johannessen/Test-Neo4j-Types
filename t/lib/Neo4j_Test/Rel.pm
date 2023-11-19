@@ -3,7 +3,7 @@ use warnings;
 
 
 package Neo4j_Test::Rel;
-sub DOES { $_[1] eq 'Neo4j::Types::Relationship' }
+sub isa { $_[1] eq 'Neo4j::Types::Relationship' }
 
 sub id { shift->[0] }
 sub start_id { shift->[1] }

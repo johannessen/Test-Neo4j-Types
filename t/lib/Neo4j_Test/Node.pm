@@ -3,7 +3,7 @@ use warnings;
 
 
 package Neo4j_Test::Node;
-sub DOES { $_[1] eq 'Neo4j::Types::Node' }
+sub isa { $_[1] eq 'Neo4j::Types::Node' }
 
 sub id { shift->[0] }
 sub labels { @{shift->[1]} }

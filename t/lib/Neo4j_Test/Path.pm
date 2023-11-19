@@ -3,7 +3,7 @@ use warnings;
 
 
 package Neo4j_Test::Path;
-sub DOES { $_[1] eq 'Neo4j::Types::Path' }
+sub isa { $_[1] eq 'Neo4j::Types::Path' }
 
 sub elements {
 	grep { defined }
@@ -17,8 +17,8 @@ sub relationships { @{shift->{r}} }
 sub new {
 	my ($class, $params) = @_;
 	my $elements = $params->{elements};
-	my @n = grep {$_->DOES('Neo4j::Types::Node')} @$elements;
-	my @r = grep {$_->DOES('Neo4j::Types::Relationship')} @$elements;
+	my @n = grep {$_->isa('Neo4j::Types::Node')} @$elements;
+	my @r = grep {$_->isa('Neo4j::Types::Relationship')} @$elements;
 	bless { n => \@n, r => \@r }, $class;
 }
 

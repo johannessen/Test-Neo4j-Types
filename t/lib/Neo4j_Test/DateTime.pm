@@ -3,7 +3,7 @@ use warnings;
 
 
 package Neo4j_Test::DateTime;
-sub DOES { $_[1] eq 'Neo4j::Types::DateTime' }
+sub isa { $_[1] eq 'Neo4j::Types::DateTime' }
 
 sub days { shift->[0] }
 sub nanoseconds { shift->[1] }

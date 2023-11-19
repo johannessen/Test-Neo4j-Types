@@ -137,7 +137,7 @@ sub _node_test {
 	my $both = { element_id => 'e17', id => 17 };
 	_element_id_test($both, $id_only, $new, $node_class, '');
 	
-	ok $n->DOES('Neo4j::Types::Node'), 'does role';
+	isa_ok $n, 'Neo4j::Types::Node';
 }
 
 
@@ -208,7 +208,7 @@ sub _relationship_test {
 	_element_id_test($both, $id_only, $new, $rel_class, 'start_');
 	_element_id_test($both, $id_only, $new, $rel_class, 'end_');
 	
-	ok $r->DOES('Neo4j::Types::Relationship'), 'does role';
+	isa_ok $r, 'Neo4j::Types::Relationship';
 }
 
 
@@ -273,7 +273,7 @@ sub _path_test {
 	is scalar(@e), 0, 'no relationships 0 gigo';
 	lives_and { is scalar($p->relationships), 0 } 'scalar context no relationships';
 	
-	ok $p->DOES('Neo4j::Types::Path'), 'does role';
+	isa_ok $p, 'Neo4j::Types::Path';
 }
 
 
@@ -338,7 +338,7 @@ sub _point_test {
 	is scalar ($p->coordinates), 2, 'scalar context undef coord';
 	
 	
-	ok $p->DOES('Neo4j::Types::Point'), 'does role';
+	isa_ok $p, 'Neo4j::Types::Point';
 }
 
 
@@ -476,7 +476,7 @@ sub _datetime_test {
 	is $dt->tz_name, undef, 'zoned datetime (too low offset): no tz_name';
 	is $dt->tz_offset, -72000, 'zoned datetime (too low offset): tz_offset';
 	
-	ok $dt->DOES('Neo4j::Types::DateTime'), 'does role';
+	isa_ok $dt, 'Neo4j::Types::DateTime';
 }
 
 
@@ -521,7 +521,7 @@ sub _duration_test {
 	is $d->seconds, 0, 'no seconds yields zero';
 	is $d->nanoseconds, 2000, 'nanoseconds';
 	
-	ok $d->DOES('Neo4j::Types::Duration'), 'does role';
+	isa_ok $d, 'Neo4j::Types::Duration';
 }
 
 
@@ -551,7 +551,7 @@ sub _bytearray_test {
 	ok ! utf8::is_utf8($d->as_string), 'wide char bytearray: UTF8 off';
 	ok length($d->as_string) > 1, 'wide char bytearray: multiple bytes';
 	
-	ok $d->DOES('Neo4j::Types::ByteArray'), 'does role';
+	isa_ok $d, 'Neo4j::Types::ByteArray';
 }
 
 
@@ -565,12 +565,12 @@ sub neo4j_bytearray_ok {
 
 package Test::Neo4j::Types::PathNode;
 
-sub DOES { $_[1] eq 'Neo4j::Types::Node' }
+sub isa { $_[1] eq 'Neo4j::Types::Node' }
 
 
 package Test::Neo4j::Types::PathRel;
 
-sub DOES { $_[1] eq 'Neo4j::Types::Relationship' }
+sub isa { $_[1] eq 'Neo4j::Types::Relationship' }
 
 
 1;

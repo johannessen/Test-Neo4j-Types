@@ -3,7 +3,7 @@ use warnings;
 
 
 package Neo4j_Test::ByteArray;
-sub DOES { $_[1] eq 'Neo4j::Types::ByteArray' }
+sub isa { $_[1] eq 'Neo4j::Types::ByteArray' }
 
 sub as_string {
 	my $bytes = shift->[0];
